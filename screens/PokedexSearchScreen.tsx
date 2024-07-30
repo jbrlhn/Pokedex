@@ -16,7 +16,7 @@ export default function PokedexSearchScreen() {
   }, []);
 
   return (
-    <View>
+    <View style={styles.searchScreen}>
       <View style={styles.searchBox}>
         <View style={styles.inputContainer}>
           <TextInput
@@ -43,6 +43,12 @@ export default function PokedexSearchScreen() {
 }
 
 const styles = StyleSheet.create({
+  searchScreen: {
+    flex: 1,
+    paddingHorizontal: 32,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
   inputContainer: {
     margin: 2,
     padding: 32,
@@ -55,12 +61,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
   },
   searchInput: {
-    height: 50,
+    height: 150,
     fontSize: 32,
     borderBottomColor: '#ffde00',
     borderBottomWidth: 2,
     color: '#ffde00',
-    marginVertical: 8,
+    paddingVertical: 8,
     fontWeight: 'bold',
     textAlign: 'justify',
   },
@@ -68,11 +74,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   buttonContainer: {
-    flex: 1,
+    flex: 2,
   },
   searchBox: {
-    marginTop: 64,
-    marginHorizontal: 16,
     padding: 16,
     backgroundColor: '#dcd7d6',
     borderRadius: 16,
