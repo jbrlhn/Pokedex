@@ -1,9 +1,20 @@
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, TextInput, StyleSheet, Text} from 'react-native';
 import PrimaryButton from '../components/PrimaryButton.tsx';
-import fetchPokemon from '../pokemonrequests/SearchPokemon.tsx';
+import {fetchPokemon} from '../pokemonrequests/SearchPokemon.tsx';
+import {useEffect, useState} from 'react';
+import {PokemonData} from '../pokemonrequests/PokemonData.tsx';
 
 export default function PokedexSearchScreen() {
-  fetchPokemon();
+  const [getPokemon, setPokemon] = useState<PokemonData>();
+  useEffect(() => {
+    async function pokemonSearch() {
+      const cc = await fetchPokemon('charmander');
+      console.log('cc ' + cc.name);
+      setPokemon(cc);
+    }
+    pokemonSearch();
+  }, []);
+
   return (
     <View>
       <View style={styles.searchBox}>
@@ -18,11 +29,14 @@ export default function PokedexSearchScreen() {
       </View>
       <View style={styles.searchButton}>
         <View style={styles.buttonContainer}>
-          <PrimaryButton buttonName={''} />
+          <PrimaryButton buttonName={'Clear'} />
         </View>
         <View style={styles.buttonContainer}>
           <PrimaryButton buttonName={'Search'} />
         </View>
+      </View>
+      <View>
+        <Text style={styles.stats}>{getPokemon?.name}</Text>
       </View>
     </View>
   );
@@ -62,5 +76,10 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#dcd7d6',
     borderRadius: 16,
+  },
+  stats: {
+    fontSize: 32,
+    color: '#dcd7d6',
+    textAlign: 'center',
   },
 });
