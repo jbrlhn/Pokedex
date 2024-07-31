@@ -6,6 +6,8 @@ import {PokemonData} from '../pokemonrequests/PokemonData.tsx';
 
 export default function PokedexSearchScreen() {
   const [getPokemon, setPokemon] = useState<PokemonData>();
+  const [inputValue, setInputValue] = useState('');
+
   useEffect(() => {
     async function pokemonSearch() {
       const cc = await fetchPokemon('charmander');
@@ -14,6 +16,18 @@ export default function PokedexSearchScreen() {
     }
     pokemonSearch();
   }, []);
+
+  function pokemonInputHandler(inputText: string) {
+    setInputValue(inputText);
+  }
+
+  function resetPokemonInputHandler() {
+    setInputValue('');
+  }
+
+  function confirmInputHandler() {
+    console.log('pressed search');
+  }
 
   return (
     <View>
@@ -24,15 +38,20 @@ export default function PokedexSearchScreen() {
             maxLength={25}
             autoCorrect={false}
             autoCapitalize={'words'}
+            onChangeText={pokemonInputHandler}
+            value={inputValue}
           />
         </View>
       </View>
       <View style={styles.searchButton}>
         <View style={styles.buttonContainer}>
-          <PrimaryButton buttonName={'Clear'} />
+          <PrimaryButton
+            onPress={resetPokemonInputHandler}
+            buttonName={'Clear'}
+          />
         </View>
         <View style={styles.buttonContainer}>
-          <PrimaryButton buttonName={'Search'} />
+          <PrimaryButton buttonName={'Search'} onPress={confirmInputHandler} />
         </View>
       </View>
       <View>

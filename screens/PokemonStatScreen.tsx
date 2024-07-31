@@ -7,5 +7,4 @@ export default function PokedexStatScreen() {
       <Text>'test'</Text>
     </View>
   );
-
 }
