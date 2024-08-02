@@ -28,17 +28,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
+    fontSize: 16,
   },
   buttonOuterContainer: {
-    borderRadius: 28,
-    margin: 16,
+    padding: 16,
     overflow: 'hidden',
   },
   buttonInnerContainer: {
+    height: 50,
+    borderRadius: 10,
     backgroundColor: '#22c4ea',
     paddingVertical: 8,
     paddingHorizontal: 16,
     elevation: 2,
+    justifyContent: 'center'
   },
   pressed: {
     opacity: 0.75,

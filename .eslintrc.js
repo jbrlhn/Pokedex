@@ -4,4 +4,5 @@ module.exports = {
     rules: {
         indent: ['error', 4],
     },
+    assets: ['./src/assets/fonts/'],
 };
