@@ -3,12 +3,13 @@ import {PokemonData} from './PokemonData.tsx';
 
 const BACKEND_URL = 'https://pokeapi.co/api/v2/';
 
-export async function fetchPokemon(pokemonName: string) {
-  const response = await axios
-    ?.get(BACKEND_URL + 'pokemon/' + pokemonName)
-    .catch(error => console.log('error ' + error));
+export const fetchSearchedPokemon = async (pokemonName: string) => {
 
-  const pokemonData: PokemonData = response?.data;
-
-  return pokemonData;
+  return fetch(BACKEND_URL + 'pokemon/' + pokemonName )
+      .then(response  => {
+        return response.json()
+      })
+      .catch(error => {
+        console.error(error);
+      })
 }

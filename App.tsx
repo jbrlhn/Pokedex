@@ -23,7 +23,7 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   mainScreen: {
     flex: 1,
-    backgroundColor: backgroundColors.none,
+    backgroundColor: 'red',
   },
 });
 export default App;

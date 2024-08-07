@@ -1,11 +1,20 @@
-import {View, TextInput, StyleSheet} from 'react-native';
+import { View, TextInput, StyleSheet, Text, Keyboard } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton.tsx';
-import {useState} from 'react';
+import { useState, useRef, useEffect } from 'react';
+import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
+import PokedexStatScreen from './PokemonStatScreen.tsx';
+import { PokemonData } from '../pokemonrequests/PokemonData.tsx';
+import { fetchSearchedPokemon } from '../pokemonrequests/SearchPokemon.tsx';
+import { backgroundColors } from '../assets/colors.js';
 
 export default function PokedexSearchScreen(
 	{onSearchPokemon}: { onSearchPokemon: (inputValue: string) => void; }
 ) {
 	const [inputValue, setInputValue] = useState('');
+	const [data, setData] = useState<PokemonData>();
+	const sheetRef = useRef<BottomSheetMethods>(null);
+	const [getPokemon, setPokemon] = useState<PokemonData | null>(null);
+
 	function pokemonInputHandler(inputText: string) {
 		setInputValue(inputText);
 	}
@@ -14,11 +23,27 @@ export default function PokedexSearchScreen(
 		setInputValue('');
 	}
 
-	function confirmInputHandler() {
-		onSearchPokemon(inputValue);
+	function closeSheetHandler() {
+		setInputValue('');
 	}
 
+	async function confirmInputHandler() {
+		if (inputValue != '') {
+			const cc = fetchSearchedPokemon(inputValue.toLowerCase());
+			setPokemon(await cc);
+			if (getPokemon != null) {
+				Keyboard.dismiss();
+				sheetRef.current?.open();
+			}
+		}
+	}
+
+	const pokemonType = (type: string | undefined) => {
+		return backgroundColors[type as keyof typeof backgroundColors];
+	};
+
 	return (
+		<View style={styles.screen}>
 		<View>
 			<View style={styles.searchBox}>
 				<View style={styles.inputContainer}>
@@ -43,6 +68,10 @@ export default function PokedexSearchScreen(
 					<PrimaryButton buttonName={'Search'} onPress={confirmInputHandler} />
 				</View>
 			</View>
+		</View>
+		<BottomSheet ref={sheetRef} onClose={closeSheetHandler} style={{backgroundColor: pokemonType(getPokemon?.types[0]?.type.name)}}>
+			<PokedexStatScreen pokemonInfo={getPokemon}/>
+		</BottomSheet>
 		</View>
 	);
 }
@@ -86,5 +115,8 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		color: '#dcd7d6',
 		textAlign: 'center',
+	},
+	screen: {
+		flex: 1
 	},
 });
