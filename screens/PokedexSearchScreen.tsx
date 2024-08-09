@@ -1,17 +1,13 @@
-import { View, TextInput, StyleSheet, Text, Keyboard } from 'react-native';
+import { View, TextInput, StyleSheet, Keyboard } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton.tsx';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
 import PokedexStatScreen from './PokemonStatScreen.tsx';
 import { PokemonData } from '../pokemonrequests/PokemonData.tsx';
 import { fetchSearchedPokemon } from '../pokemonrequests/SearchPokemon.tsx';
-import { backgroundColors } from '../assets/colors.js';
 
-export default function PokedexSearchScreen(
-	{onSearchPokemon}: { onSearchPokemon: (inputValue: string) => void; }
-) {
+export default function PokedexSearchScreen() {
 	const [inputValue, setInputValue] = useState('');
-	const [data, setData] = useState<PokemonData>();
 	const sheetRef = useRef<BottomSheetMethods>(null);
 	const [getPokemon, setPokemon] = useState<PokemonData | null>(null);
 
@@ -22,7 +18,6 @@ export default function PokedexSearchScreen(
 	function resetPokemonInputHandler() {
 		setInputValue('');
 	}
-
 	function closeSheetHandler() {
 		setInputValue('');
 	}
@@ -38,15 +33,11 @@ export default function PokedexSearchScreen(
 		}
 	}
 
-	const pokemonType = (type: string | undefined) => {
-		return backgroundColors[type as keyof typeof backgroundColors];
-	};
-
 	return (
 		<View style={styles.screen}>
-		<View>
-			<View style={styles.searchBox}>
-				<View style={styles.inputContainer}>
+			<View>
+				<View style={styles.searchBox}>
+					<View style={styles.inputContainer}>
 					<TextInput
 						style={styles.searchInput}
 						maxLength={25}
@@ -55,23 +46,26 @@ export default function PokedexSearchScreen(
 						onChangeText={pokemonInputHandler}
 						value={inputValue}
 					/>
+					</View>
 				</View>
-			</View>
-			<View style={styles.searchButton}>
-				<View style={styles.buttonContainer}>
-					<PrimaryButton
+				<View style={styles.searchButton}>
+					<View style={styles.buttonContainer}>
+						<PrimaryButton
 						onPress={resetPokemonInputHandler}
 						buttonName={'Clear'}
-					/>
-				</View>
-				<View style={styles.buttonContainer}>
-					<PrimaryButton buttonName={'Search'} onPress={confirmInputHandler} />
+						/>
+					</View>
+					<View style={styles.buttonContainer}>
+						<PrimaryButton
+						buttonName={'Search'}
+						onPress={confirmInputHandler}
+						/>
+					</View>
 				</View>
 			</View>
-		</View>
-		<BottomSheet ref={sheetRef} onClose={closeSheetHandler} style={{backgroundColor: pokemonType(getPokemon?.types[0]?.type.name)}}>
-			<PokedexStatScreen pokemonInfo={getPokemon}/>
-		</BottomSheet>
+			<BottomSheet ref={sheetRef} onClose={closeSheetHandler} style={{...styles.bottomSheet, }}>
+				<PokedexStatScreen pokemonInfo={getPokemon} />
+			</BottomSheet>
 		</View>
 	);
 }
@@ -119,4 +113,6 @@ const styles = StyleSheet.create({
 	screen: {
 		flex: 1
 	},
+	bottomSheet: {
+	}
 });

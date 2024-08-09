@@ -14,17 +14,18 @@ export const TypePill = ({text, background}: {text?: string, background?: string
 
 const styles = StyleSheet.create({
 	pill: {
-		height: 50,
-		borderRadius: 24,
-		paddingVertical: 8,
+		borderRadius: 16,
+		padding: 8,
+		marginTop: 8,
+		marginEnd: 16,
 		elevation: 1,
 		justifyContent: 'center',
-		alignItems: 'center',
-		borderWidth: 3
+		alignItems: 'center'
 	},
 	pillText: {
 		color: 'white',
 		justifyContent: 'center',
-
+		fontSize: 16,
+		fontWeight: 'bold'
 	}
 })
