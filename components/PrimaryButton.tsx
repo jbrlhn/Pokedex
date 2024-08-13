@@ -25,6 +25,7 @@ export default function PrimaryButton({
 
 const styles = StyleSheet.create({
   buttonText: {
+    fontFamily: '',
     color: 'white',
     textAlign: 'center',
     fontSize: 16,

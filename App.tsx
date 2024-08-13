@@ -1,15 +1,14 @@
 import {StyleSheet, View} from 'react-native';
-import PokedexSearchScreen from './screens/PokedexSearchScreen.tsx';
 import React from 'react';
+import HomeScreen from './screens/HomeScreen';
 
 function App(): React.JSX.Element {
-  return <View style={styles.mainScreen}>{<PokedexSearchScreen/>}</View>;
+  return <View style={styles.mainScreen}>{<HomeScreen/>}</View>;
 }
 
 const styles = StyleSheet.create({
   mainScreen: {
     flex: 1,
-    backgroundColor: 'red',
   },
 });
 export default App;

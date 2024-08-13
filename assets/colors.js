@@ -38,7 +38,9 @@ const backgroundColors = {
     rock: '#D4C294',
     steel: '#4C91B2',
     water: '#58ABF6',
-    none: '#ffffff'
+    none: '#ffffff',
+    generations: '#EA5D60',
+    card: '#ECECEC'
 };
 
 const textColor = {

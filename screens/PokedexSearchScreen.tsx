@@ -39,7 +39,7 @@ export default function PokedexSearchScreen() {
 				<View style={styles.searchBox}>
 					<View style={styles.inputContainer}>
 					<TextInput
-						style={styles.searchInput}
+						style={{...styles.searchInput}}
 						maxLength={25}
 						autoCorrect={false}
 						autoCapitalize={'words'}
@@ -84,11 +84,13 @@ const styles = StyleSheet.create({
 	},
 	searchInput: {
 		height: 50,
+		fontFamily: 'Prompt-Italic',
 		fontSize: 32,
 		borderBottomColor: '#ffde00',
 		borderBottomWidth: 2,
 		color: '#ffde00',
 		marginVertical: 8,
+		paddingVertical: 8,
 		fontWeight: 'bold',
 		textAlign: 'justify',
 	},
@@ -111,8 +113,16 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 	screen: {
-		flex: 1
+		flex: 1,
 	},
 	bottomSheet: {
+	},
+	testText: {
+		fontFamily: 'Prompt-Italic',
+		fontSize: 28
+	},
+	testText2: {
+		fontFamily: 'Prompt-Light',
+		fontSize: 28
 	}
 });
