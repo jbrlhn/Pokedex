@@ -34,7 +34,7 @@ export default function PokedexSearchScreen() {
 	}
 
 	return (
-		<View style={styles.screen}>
+		<View>
 			<View>
 				<View style={styles.searchBox}>
 					<View style={styles.inputContainer}>
@@ -111,9 +111,6 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		color: '#dcd7d6',
 		textAlign: 'center',
-	},
-	screen: {
-		flex: 1,
 	},
 	bottomSheet: {
 	},

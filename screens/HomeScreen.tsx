@@ -1,62 +1,69 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import GenerationsCard from '../components/GenerationsCard';
-import { backgroundColors } from '../assets/colors';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { backgroundColors, colors, textColor } from '../assets/colors.js';
 
+type HomeScreenProps = {
+	onClick: () => void;
+}
 
-
-export default function HomeScreen() {
-
-	let generations = [];
-
-	let imgPath = [
-		require(`../assets/img/Generation1.png`),
-		require(`../assets/img/Generation2.png`),
-		require(`../assets/img/Generation3.png`),
-		require(`../assets/img/Generation4.png`),
-		require(`../assets/img/Generation5.png`),
-		require(`../assets/img/Generation6.png`),
-		require(`../assets/img/Generation7.png`),
-		require(`../assets/img/Generation8.png`),
-	];
-
-	// Display all Pokémon types
-	for (let type = 0; type < imgPath.length; type++) {
-		generations.push(
-			<View key={type} style={styles.item}>
-				<GenerationsCard genLocation={imgPath[type]} genNum={type}/>
-			</View>
-		)
-	}
-
+export default function HomeScreen({onClick}: HomeScreenProps) {
 	return (
-		<SafeAreaView>
-			<View style={styles.screen}>
-				<Text style={styles.title}>Generations</Text>
-				<View style={styles.container}>
-					{generations}
+		<View style={styles.screen}>
+			<Text style={styles.title}>Pokédex</Text>
+			<Text style={styles.description}>Search for Pokémon by name or using the National Pokédex number.</Text>
+			<TouchableOpacity onPress={onClick}>
+				<View style={styles.inputContainer}>
+					<View style={styles.inputRow} >
+						<Image source={require('../assets/img/Search.png')} />
+						<Text style={styles.hint}>What Pokémon are you looking for?</Text>
+					</View>
 				</View>
-			</View>
-		</SafeAreaView>
+			</TouchableOpacity>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	screen: {
-		padding: 8,
-		backgroundColor: backgroundColors.generations
+		flex: 1,
+		margin: 8
+	},
+	inputContainer: {
+		height: 40,
+		borderRadius: 8,
+		backgroundColor: backgroundColors.defaultInput,
+		elevation: 1,
+		shadowColor: 'black',
+		shadowOffset: { width: 0, height: 1 },
+		shadowRadius: 1,
+		shadowOpacity: 0.1,
+	},
+	inputRow: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingStart: 8
+	},
+	hint: {
+		color: colors.dark,
+		textAlign: 'center',
+		textDecorationColor: backgroundColors.card,
+		paddingStart: 8
 	},
 	title: {
 		fontFamily: 'SFProTextBold',
 		fontSize: 32,
-		color: 'white'
+		color: textColor.black,
+		paddingBottom: 12
 	},
-	container: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		alignItems: 'flex-start'
+	description: {
+		fontFamily: 'SFProTextMedium',
+		fontSize: 12,
+		color: textColor.grey,
+		paddingBottom: 12,
+		paddingEnd: 32
 	},
-	item: {
-		width: '50%',
-		height: 150,
+	background: {
+		resizeMode: 'cover',
+		width: '100%',
 	}
 });

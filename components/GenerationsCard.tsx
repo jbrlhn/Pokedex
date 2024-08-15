@@ -2,13 +2,12 @@ import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { backgroundColors } from '../assets/colors.js';
 
 export default function GenerationsCard({genLocation, genNum}: {genLocation: any, genNum: number}) {
-	console.log(genLocation)
 	return(
 		<View style={styles.card}>
 			<ImageBackground
 				style={styles.background}
-				source={require('../assets/img/10x5.png')}
-				imageStyle={{opacity: 0.1}}>
+				source={require('../assets/img/BottomHalfPokeball.png')}
+				imageStyle={{opacity: 0.7}}>
 				<View style={styles.content}>
 					<Image
 						style={styles.image}
@@ -47,8 +46,7 @@ const styles = StyleSheet.create({
 	},
 	background: {
 		flex: 1,
-		alignContent: 'flex-start',
-		borderRadius: 24,
-		margin: 8
+		resizeMode: 'contain',
+		borderRadius: 24
 	}
 });

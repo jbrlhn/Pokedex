@@ -40,7 +40,9 @@ const backgroundColors = {
     water: '#58ABF6',
     none: '#ffffff',
     generations: '#EA5D60',
-    card: '#ECECEC'
+    card: '#ECECEC',
+    silverGrey: '#AAACB8',
+    defaultInput: '#F2F2F2'
 };
 
 const textColor = {
