@@ -1,15 +1,19 @@
-import { View, TextInput, StyleSheet, Keyboard } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton.tsx';
-import { useState, useRef } from 'react';
-import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
-import PokedexStatScreen from './PokemonStatScreen.tsx';
+import { useState } from 'react';
 import { PokemonData } from '../pokemonrequests/PokemonData.tsx';
 import { fetchSearchedPokemon } from '../pokemonrequests/SearchPokemon.tsx';
+import CustomModal from '../components/CustomModal';
 
-export default function PokedexSearchScreen() {
+
+type SearchScreenProps = {
+  onClick: (getPokemon: PokemonData) => void;
+};
+export default function PokedexSearchScreen({onClick}: SearchScreenProps) {
+
 	const [inputValue, setInputValue] = useState('');
-	const sheetRef = useRef<BottomSheetMethods>(null);
-	const [getPokemon, setPokemon] = useState<PokemonData | null>(null);
+
+	const [modalVisible, setModalVisible] = useState(false);
 
 	function pokemonInputHandler(inputText: string) {
 		setInputValue(inputText);
@@ -18,18 +22,18 @@ export default function PokedexSearchScreen() {
 	function resetPokemonInputHandler() {
 		setInputValue('');
 	}
-	function closeSheetHandler() {
-		setInputValue('');
-	}
+
 
 	async function confirmInputHandler() {
 		if (inputValue != '') {
-			const cc = fetchSearchedPokemon(inputValue.toLowerCase());
-			setPokemon(await cc);
-			if (getPokemon != null) {
-				Keyboard.dismiss();
-				sheetRef.current?.open();
-			}
+			fetchSearchedPokemon(inputValue.toLowerCase()).then(result => {
+				if (result!= null) {
+					resetPokemonInputHandler();
+					onClick(result)
+				} else {
+					setModalVisible(true)
+				}
+			})
 		}
 	}
 
@@ -62,10 +66,9 @@ export default function PokedexSearchScreen() {
 						/>
 					</View>
 				</View>
+				{modalVisible ? <CustomModal message={'Couldn\'t find this Pokemon. Try again.'} buttonText={'OK'} onClose={() =>
+					setModalVisible(false)}/> : null}
 			</View>
-			<BottomSheet ref={sheetRef} onClose={closeSheetHandler} style={{...styles.bottomSheet, }}>
-				<PokedexStatScreen pokemonInfo={getPokemon} />
-			</BottomSheet>
 		</View>
 	);
 }

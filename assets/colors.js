@@ -49,6 +49,7 @@ const textColor = {
     white: '#FFF',
     black: '#17171B',
     grey: '#747476',
+    blue: '#58ABF6',
     number: 'rgba(23, 23, 27, 0.6)',
 };
 
