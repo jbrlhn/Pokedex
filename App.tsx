@@ -1,5 +1,12 @@
-import { Button, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useRef, useState } from 'react';
+import {
+	Button,
+	SafeAreaView,
+	ScrollView, StatusBar,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import GenerationsSheet from './screens/GenerationsSheet';
 import HomeScreen from './screens/HomeScreen';
 import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
@@ -7,9 +14,8 @@ import PokedexSearchScreen from './screens/PokedexSearchScreen';
 import { backgroundColors } from './assets/colors';
 import { PokemonData } from './pokemonrequests/PokemonData';
 import PokedexStatScreen from './screens/PokemonStatScreen';
-// import { fetchAllPokemon, fetchSearchedPokemon } from './pokemonrequests/SearchPokemon';
-// import { AllPokemon } from './pokemonrequests/AllPokemon';
-// import { FlatList } from 'react-native-gesture-handler/lib/typescript/components/GestureComponents.web';
+import { fetchAllPokemon } from './pokemonrequests/SearchPokemon';
+import { AllPokemon, Result } from './pokemonrequests/AllPokemon';
 
 function App(): React.JSX.Element {
 
@@ -17,6 +23,7 @@ function App(): React.JSX.Element {
 	const generationsSheet = useRef<BottomSheetMethods>(null);
 	const pokemonSheet = useRef<BottomSheetMethods>(null);
 	const [getPokemonInfo, setPokemonInfo] = useState<PokemonData | null>(null);
+	const [getPokemonList, setPokemonList] =useState([]);
 
 	async function searchBarPressed() {
 		searchSheet.current?.open();
@@ -25,21 +32,17 @@ function App(): React.JSX.Element {
 		generationsSheet.current?.open();
 	}
 
-	// async function pokemonList() {
-	// 	const allPokemon: AllPokemon[] = await fetchAllPokemon()
-	//
-	//
-	//
-	// 	if (allPokemon != null) {
-	// 		return (
-	// 			<View>
-	// 				<FlatList
-	// 					data={allPokemon}
-	// 					renderItem={}
-	// 			</View>
-	// 		);
-	// 	}
-	// }
+
+	useEffect(() => {
+		fetchAllPokemon().then((fetched) => {
+			const allPokemon= fetched.results
+			allPokemon.forEach((poke: Result) => {
+				console.log(poke.name)
+			});
+			setPokemonList(allPokemon)
+		})
+	}, []);
+
 
 	return (
 		<SafeAreaView>
@@ -67,10 +70,22 @@ function App(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  mainScreen: {
-	  height: '100%',
-	  width: '100%',
-	  padding: 16
-  },
+	mainScreen: {
+		height: '100%',
+		width: '100%',
+		padding: 16
+	},
+	container: {
+		flex: 1,
+		marginTop: StatusBar.currentHeight || 0,
+	},
+	cards: {
+		padding: 20,
+		marginVertical: 8,
+		marginHorizontal: 16
+	},
+	name: {
+		fontSize: 32
+	}
 });
 export default App;
