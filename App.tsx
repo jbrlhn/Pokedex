@@ -1,7 +1,7 @@
 import {
-	Button,
+	Button, FlatList,
 	SafeAreaView,
-	ScrollView, StatusBar,
+	StatusBar,
 	StyleSheet,
 	Text,
 	View,
@@ -15,7 +15,7 @@ import { backgroundColors } from './assets/colors';
 import { PokemonData } from './pokemonrequests/PokemonData';
 import PokedexStatScreen from './screens/PokemonStatScreen';
 import { fetchAllPokemon } from './pokemonrequests/SearchPokemon';
-import { AllPokemon, Result } from './pokemonrequests/AllPokemon';
+import { Result } from './pokemonrequests/AllPokemon';
 
 function App(): React.JSX.Element {
 
@@ -23,7 +23,7 @@ function App(): React.JSX.Element {
 	const generationsSheet = useRef<BottomSheetMethods>(null);
 	const pokemonSheet = useRef<BottomSheetMethods>(null);
 	const [getPokemonInfo, setPokemonInfo] = useState<PokemonData | null>(null);
-	const [getPokemonList, setPokemonList] =useState([]);
+	const [getPokemonList, setPokemonList] =useState<Result[]>();
 
 	async function searchBarPressed() {
 		searchSheet.current?.open();
@@ -35,22 +35,28 @@ function App(): React.JSX.Element {
 
 	useEffect(() => {
 		fetchAllPokemon().then((fetched) => {
-			const allPokemon= fetched.results
-			allPokemon.forEach((poke: Result) => {
-				console.log(poke.name)
-			});
+			const allPokemon: Result[] = fetched.results
 			setPokemonList(allPokemon)
 		})
 	}, []);
 
+	const AllPokemonList = () => {
+		return(
+			<View style={styles.pokemonList}>
+				<FlatList
+					data={getPokemonList}
+					renderItem={({item}) => <Text style={styles.name}>{item.name}</Text>}
+				/>
+			</View>
+		);
+	}
 
 	return (
 		<SafeAreaView>
 			<View style={styles.mainScreen}>
-				<ScrollView nestedScrollEnabled={true}>
-					<HomeScreen onClick={() => searchBarPressed()}/>
-					<Button title={'Generations'} onPress={ () => buttonPressed()}/>
-				</ScrollView>
+				<Button title={'Generations'} onPress={ () => buttonPressed()}/>
+				<HomeScreen onClick={() => searchBarPressed()}/>
+				{AllPokemonList()}
 				<BottomSheet ref={searchSheet} height={'80%'} style={{backgroundColor: backgroundColors.generations}}>
 					<PokedexSearchScreen  onClick={(value: PokemonData) => {
 						setPokemonInfo(value)
@@ -75,14 +81,13 @@ const styles = StyleSheet.create({
 		width: '100%',
 		padding: 16
 	},
+
 	container: {
-		flex: 1,
 		marginTop: StatusBar.currentHeight || 0,
 	},
-	cards: {
-		padding: 20,
-		marginVertical: 8,
-		marginHorizontal: 16
+	pokemonList: {
+		flex: 1,
+		marginBottom: 8
 	},
 	name: {
 		fontSize: 32
