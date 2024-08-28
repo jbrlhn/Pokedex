@@ -13,7 +13,7 @@ export const fetchSearchedPokemon = async (pokemonName: string) => {
 }
 
 export const fetchAllPokemon = async () => {
-    return fetch('https://pokeapi.co/api/v2/pokemon/?limit=20')
+    return fetch('https://pokeapi.co/api/v2/pokemon/?limit=151')
         .then(response => {
             return response.json()
         }).catch(() => {

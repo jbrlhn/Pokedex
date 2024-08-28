@@ -23,7 +23,6 @@ export default function GenerationsCard({genLocation, genNum}: {genLocation: any
 
 const styles = StyleSheet.create({
 	card: {
-		flex: 1,
 		height: 120,
 		borderRadius: 24,
 		backgroundColor: backgroundColors.card,

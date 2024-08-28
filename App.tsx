@@ -1,5 +1,5 @@
 import {
-	Button, FlatList,
+	Button, FlatList, Pressable,
 	SafeAreaView,
 	StatusBar,
 	StyleSheet,
@@ -14,8 +14,10 @@ import PokedexSearchScreen from './screens/PokedexSearchScreen';
 import { backgroundColors } from './assets/colors';
 import { PokemonData } from './pokemonrequests/PokemonData';
 import PokedexStatScreen from './screens/PokemonStatScreen';
-import { fetchAllPokemon } from './pokemonrequests/SearchPokemon';
+import { fetchAllPokemon, fetchSearchedPokemon } from './pokemonrequests/SearchPokemon';
 import { Result } from './pokemonrequests/AllPokemon';
+import { fetchGeneration } from './pokemonrequests/Generations';
+import { Generation } from './pokemonrequests/GenerationsInterface';
 
 function App(): React.JSX.Element {
 
@@ -32,6 +34,22 @@ function App(): React.JSX.Element {
 		generationsSheet.current?.open();
 	}
 
+	async function selectedGenerationPressed(genNumber: number) {
+		genNumber?
+		fetchGeneration(genNumber).then((result: Generation) => {
+			setPokemonList(result.pokemon_species);
+			generationsSheet.current?.close();
+		}) : null
+	}
+
+	async function pokemonCardPressed(url: string) {
+		const pokemonNumber = url.split('/').slice(-2)[0];
+		url?
+		fetchSearchedPokemon(pokemonNumber).then((result: PokemonData) => {
+		setPokemonInfo(result);
+		pokemonSheet.current?.open();
+		}): null
+	}
 
 	useEffect(() => {
 		fetchAllPokemon().then((fetched) => {
@@ -45,7 +63,11 @@ function App(): React.JSX.Element {
 			<View style={styles.pokemonList}>
 				<FlatList
 					data={getPokemonList}
-					renderItem={({item}) => <Text style={styles.name}>{item.name}</Text>}
+					renderItem={({item}) =>
+						<Pressable style={styles.card} onPress={() => {pokemonCardPressed(item.url ?? '')}}>
+							<Text style={styles.name}>{`${item.name}`}</Text>
+						</Pressable>
+				}
 				/>
 			</View>
 		);
@@ -54,9 +76,11 @@ function App(): React.JSX.Element {
 	return (
 		<SafeAreaView>
 			<View style={styles.mainScreen}>
+
 				<Button title={'Generations'} onPress={ () => buttonPressed()}/>
 				<HomeScreen onClick={() => searchBarPressed()}/>
 				{AllPokemonList()}
+
 				<BottomSheet ref={searchSheet} height={'80%'} style={{backgroundColor: backgroundColors.generations}}>
 					<PokedexSearchScreen  onClick={(value: PokemonData) => {
 						setPokemonInfo(value)
@@ -65,7 +89,9 @@ function App(): React.JSX.Element {
 					}}/>
 				</BottomSheet>
 				<BottomSheet ref={generationsSheet} height={'80%'} style={{backgroundColor:'white'}}>
-					<GenerationsSheet/>
+					<GenerationsSheet onClick={(gen: number) => {
+						selectedGenerationPressed(gen);
+					}}/>
 				</BottomSheet>
 				<BottomSheet ref={pokemonSheet} height={'50%'}>
 					<PokedexStatScreen pokemonInfo={getPokemonInfo}/>
@@ -90,7 +116,19 @@ const styles = StyleSheet.create({
 		marginBottom: 8
 	},
 	name: {
-		fontSize: 32
-	}
+		flex: 1,
+		fontSize: 32,
+		textAlign: 'center',
+	},
+	card: {
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		borderRadius: 8,
+		flexDirection: 'row',
+		backgroundColor: 'white',
+		padding: 16,
+		borderWidth: 1,
+		margin: 8,
+	},
 });
 export default App;

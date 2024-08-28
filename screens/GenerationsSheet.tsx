@@ -1,11 +1,12 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GenerationsCard from '../components/GenerationsCard';
 import { textColor } from '../assets/colors';
 
+type GenerationSheetProps = {
+	onClick: (gen: number) => void;
+};
 
-
-
-export default function GenerationsSheet() {
+export default function GenerationsSheet({onClick}: GenerationSheetProps) {
 
 	let generations = [];
 
@@ -23,9 +24,11 @@ export default function GenerationsSheet() {
 	// Display all Pokémon types
 	for (let type = 0; type < imgPath.length; type++) {
 		generations.push(
-			<View key={type} style={styles.item}>
-				<GenerationsCard genLocation={imgPath[type]} genNum={type}/>
-			</View>
+			<TouchableOpacity key={type} onPress={() => onClick(type+1)} style={styles.item}>
+				<View key={type}>
+					<GenerationsCard genLocation={imgPath[type]} genNum={type}/>
+				</View>
+			</TouchableOpacity>
 		)
 	}
 
