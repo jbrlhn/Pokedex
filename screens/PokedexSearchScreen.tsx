@@ -115,14 +115,4 @@ const styles = StyleSheet.create({
 		color: '#dcd7d6',
 		textAlign: 'center',
 	},
-	bottomSheet: {
-	},
-	testText: {
-		fontFamily: 'Prompt-Italic',
-		fontSize: 28
-	},
-	testText2: {
-		fontFamily: 'Prompt-Light',
-		fontSize: 28
-	}
 });

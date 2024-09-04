@@ -24,7 +24,8 @@ export default function HomeScreen({onClick}: HomeScreenProps) {
 
 const styles = StyleSheet.create({
 	screen: {
-		paddingBottom: 8
+		paddingBottom: 8,
+		padding: 16
 	},
 	inputContainer: {
 		height: 40,

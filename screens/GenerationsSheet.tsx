@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GenerationsCard from '../components/GenerationsCard';
-import { textColor } from '../assets/colors';
+import { backgroundColors, textColor } from '../assets/colors';
 
 type GenerationSheetProps = {
 	onClick: (gen: number) => void;
@@ -24,7 +24,7 @@ export default function GenerationsSheet({onClick}: GenerationSheetProps) {
 	// Display all Pokémon types
 	for (let type = 0; type < imgPath.length; type++) {
 		generations.push(
-			<TouchableOpacity key={type} onPress={() => onClick(type+1)} style={styles.item}>
+			<TouchableOpacity key={type} onPress={() => onClick(type + 1)} style={styles.item}>
 				<View key={type}>
 					<GenerationsCard genLocation={imgPath[type]} genNum={type}/>
 				</View>
@@ -33,15 +33,15 @@ export default function GenerationsSheet({onClick}: GenerationSheetProps) {
 	}
 
 	return (
-		<View style={styles.screen}>
-			<SafeAreaView>
-					<Text style={styles.title}>Generations</Text>
-					<Text>Use search for generations to explore your Pokémon!</Text>
-					<View style={styles.container}>
-						{generations}
-					</View>
-			</SafeAreaView>
-		</View>
+		<SafeAreaView>
+			<View style={styles.screen}>
+				<Text style={styles.title}>Generations</Text>
+				<Text>Use search for generations to explore your Pokémon!</Text>
+				<View style={styles.container}>
+					{generations}
+				</View>
+			</View>
+		</SafeAreaView>
 	);
 }
 
@@ -70,5 +70,12 @@ const styles = StyleSheet.create({
 		fontFamily: 'SFProTextBold',
 		fontSize: 16,
 		color: textColor.grey
+	},
+	button: {
+		flex: 1
+	},
+	genSelected: {
+		opacity: 0.5,
+		backgroundColor: backgroundColors.generations
 	}
 });
