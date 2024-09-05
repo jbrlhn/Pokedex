@@ -5,10 +5,11 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	Platform,
+	Platform, Image,
 } from 'react-native';
 
 import { textColor } from '../assets/colors';
+import React from 'react';
 
 
 const capitalizeName = (currentName: string) => {
@@ -17,29 +18,49 @@ const capitalizeName = (currentName: string) => {
 	return firstLetter + remainderLetters;
 };
 
-export default function AllPokemonList({pokemonResults, cardPressed}: {pokemonResults: Result[], cardPressed: (url: string) => void})  {
-		return (
-			<View style={styles.pokemonList}>
-				<FlatList
-					keyExtractor={(pokemonList, index) =>
-						pokemonList?.name?.toString() ?? index.toString()
-					}
-					data={pokemonResults}
-					renderItem={({item}) => (
-						<Pressable
-							style={styles.card}
-							onPress={() => {
-								// pokemonCardPressed(item.url ?? '');
-								cardPressed(item.url ?? '')
-							}}>
-							<Text style={styles.name}>
-								{capitalizeName(item.name ?? '')}
-							</Text>
-						</Pressable>
-					)}
-				/>
-			</View>
-		);
+export default function AllPokemonList({
+    pokemonResults,
+    cardPressed,
+    pokemonRef,
+}: {
+    pokemonResults: Result[];
+    cardPressed: (url: string) => void;
+    pokemonRef?: React.MutableRefObject<FlatList | null>;
+}) {
+
+    return (
+        <View style={styles.pokemonList}>
+            <FlatList
+                keyExtractor={(pokemonList, index) =>
+                    pokemonList?.name?.toString() ?? index.toString()
+                }
+                showsVerticalScrollIndicator={false}
+                initialNumToRender={10}
+                data={pokemonResults}
+                renderItem={({item, index}) => (
+                    <Pressable
+                        style={styles.card}
+                        onPress={() => {
+                            cardPressed(item.url ?? '');
+                        }}>
+	                    <View style={styles.cardContent}>
+		                    <Text style={styles.name}>
+			                    {index + 1}
+		                    </Text>
+	                        <Text style={styles.name}>
+	                            {capitalizeName(item.name ?? '')}
+	                        </Text>
+							<Image
+								style={styles.pokemonPhoto}
+								source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${index+1}.png`}}
+							/>
+	                    </View>
+                    </Pressable>
+                )}
+                ref={pokemonRef}
+            />
+        </View>
+    );
 };
 
 
@@ -49,13 +70,13 @@ const styles = StyleSheet.create({
 		marginBottom: 8
 	},
 	name: {
-		flex: 1,
 		fontSize: 32,
 		textAlign: 'center',
 		fontFamily: 'SFProTextRegular',
 		color: textColor.black
 	},
 	card: {
+		flex: 1,
 		justifyContent: 'space-between',
 		backgroundColor: 'white',
 		alignItems: 'center',
@@ -70,4 +91,15 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.2,
 		overflow: Platform.OS === 'android' ? 'hidden' : 'visible'
 	},
+	cardContent: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	pokemonPhoto: {
+		width: 100,
+		height: 100,
+		resizeMode: 'cover',
+	}
 });

@@ -6,7 +6,7 @@ import {
 	Platform,
 	Image,
 	TouchableHighlight,
-	Animated,
+	Animated, FlatList,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import GenerationsSheet from './screens/GenerationsSheet';
@@ -29,6 +29,7 @@ function App(): React.JSX.Element {
     const pokemonSheet = useRef<BottomSheetMethods>(null);
     const [getPokemonInfo, setPokemonInfo] = useState<PokemonData | null>(null);
     const [getPokemonList, setPokemonList] = useState<Result[]>();
+	const flatListRef = useRef<FlatList | null>(null);
 
     async function searchBarPressed() {
         searchSheet.current?.open();
@@ -42,8 +43,11 @@ function App(): React.JSX.Element {
             ? fetchGeneration(genNumber).then((result: Generation) => {
                   setPokemonList(result.pokemon_species);
                   generationsSheet.current?.close();
+				  if (flatListRef.current !== null) {
+					  flatListRef.current.scrollToIndex({animated: true, index: 0})
+				  }
               })
-            : null;
+        : null;
     }
 
     async function pokemonCardPressed(url: string) {
@@ -82,6 +86,7 @@ function App(): React.JSX.Element {
                 <AllPokemonList
 	                pokemonResults={getPokemonList ?? []}
 	                cardPressed={(url: string) => {pokemonCardPressed(url)}}
+	                pokemonRef={flatListRef}
                 />
 
                 <BottomSheet
