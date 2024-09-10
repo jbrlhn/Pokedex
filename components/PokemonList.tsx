@@ -5,18 +5,36 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	Platform, Image,
+	Platform, Image, ImageBackground,
 } from 'react-native';
 
 import { textColor } from '../assets/colors';
 import React from 'react';
 
+type PokemonInfo = {
+	name?: string,
+	url?: string,
+	id?: number
+}
+
+const pokemonImageUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'
 
 const capitalizeName = (currentName: string) => {
 	const firstLetter = currentName.charAt(0).toUpperCase();
 	const remainderLetters = currentName.slice(1) ?? '';
 	return firstLetter + remainderLetters;
 };
+
+const leadingNumber = (order: string, size: number) => {
+	order = order.toString();
+	while (order.length < size) order = "0" + order;
+	return order;
+}
+
+const getPokemonImage = (url: string) => {
+	return `${pokemonImageUrl}${url?.split('/').filter(Number)[0]}.png`
+}
+
 
 export default function AllPokemonList({
     pokemonResults,
@@ -27,34 +45,52 @@ export default function AllPokemonList({
     cardPressed: (url: string) => void;
     pokemonRef?: React.MutableRefObject<FlatList | null>;
 }) {
+	const pokemonIdList: PokemonInfo[] = [];
+
+	pokemonResults?.forEach((pokemon) => {
+		return pokemonIdList.push({
+            name: capitalizeName(pokemon?.name ?? ''),
+            url: pokemon?.url,
+            id: Number(pokemon?.url?.split('/').filter(Number)[0]) ?? null
+        });
+	})
+
+	pokemonIdList.sort((n1,n2) => (n1?.id ?? 0) - (n2?.id ?? 0))
 
     return (
         <View style={styles.pokemonList}>
             <FlatList
-                keyExtractor={(pokemonList, index) =>
-                    pokemonList?.name?.toString() ?? index.toString()
+                keyExtractor={(pokemonList) =>
+                   pokemonList.id
                 }
+                extraData={pokemonIdList}
                 showsVerticalScrollIndicator={false}
-                initialNumToRender={10}
-                data={pokemonResults}
-                renderItem={({item, index}) => (
+                initialNumToRender={20}
+                data={pokemonIdList}
+                renderItem={({item}) => (
                     <Pressable
                         style={styles.card}
                         onPress={() => {
                             cardPressed(item.url ?? '');
                         }}>
+	                    <ImageBackground
+		                    style={styles.background}
+		                    source={require('../assets/img/BottomHalfPokeball.png')}>
 	                    <View style={styles.cardContent}>
-		                    <Text style={styles.name}>
-			                    {index + 1}
-		                    </Text>
-	                        <Text style={styles.name}>
-	                            {capitalizeName(item.name ?? '')}
-	                        </Text>
+		                    <View style={styles.stats}>
+			                    <Text style={styles.name}>
+				                    #{leadingNumber(item.id, 3)}
+			                    </Text>
+		                        <Text style={styles.name}>
+		                            {capitalizeName(item.name ?? '')}
+		                        </Text>
+		                    </View>
 							<Image
 								style={styles.pokemonPhoto}
-								source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${index+1}.png`}}
+								source={{uri: getPokemonImage(item.url ?? '')}}
 							/>
 	                    </View>
+	                    </ImageBackground>
                     </Pressable>
                 )}
                 ref={pokemonRef}
@@ -82,7 +118,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 8,
 		flexDirection: 'row',
-		padding: 16,
 		margin: 8,
 		elevation: 4,
 		shadowColor: 'black',
@@ -96,10 +131,19 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+		padding: 16
 	},
 	pokemonPhoto: {
-		width: 100,
-		height: 100,
-		resizeMode: 'cover',
+		width: 150,
+		height: 150,
+		resizeMode: 'cover'
+	},
+	stats: {
+		flexDirection: 'column',
+	},
+	background: {
+		flex: 1,
+		resizeMode: 'contain',
+		borderRadius: 24
 	}
 });

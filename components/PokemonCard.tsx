@@ -42,9 +42,9 @@ export default function PokemonCard({pokemonInfo}: {pokemonInfo: PokemonData | n
 					imageStyle={{opacity: 0.2}}>
 					{ pokemonInfo?.sprites?.front_default && (
 						<Image
-							style={styles.image}
-							source={{uri: pokemonInfo?.sprites?.front_default} }
-						/>
+						style={styles.image}
+					source={{uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonInfo?.id}.png`}}
+				/>
 					)}
 				</ImageBackground>
 			</View>

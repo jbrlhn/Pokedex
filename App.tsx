@@ -69,8 +69,6 @@ function App(): React.JSX.Element {
         });
     }, []);
 
-
-
     return (
         <SafeAreaView>
             <View style={styles.mainScreen}>
