@@ -9,7 +9,7 @@ import {
 	Animated, FlatList,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import GenerationsSheet from './screens/GenerationsSheet';
+import GenerationsScreen from './screens/GenerationsScreen';
 import HomeScreen from './screens/HomeScreen';
 import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
 import PokedexSearchScreen from './screens/PokedexSearchScreen';
@@ -18,10 +18,11 @@ import { PokemonData } from './pokemonrequests/PokemonData';
 import PokedexStatScreen from './screens/PokemonStatScreen';
 import { fetchAllPokemon, fetchSearchedPokemon } from './pokemonrequests/SearchPokemon';
 import { Result } from './pokemonrequests/AllPokemon';
-import { fetchGeneration } from './pokemonrequests/Generations';
-import { Generation } from './pokemonrequests/GenerationsInterface';
+import { fetchGeneration } from './pokemonrequests/generations/Generations';
+import { Generation } from './pokemonrequests/generations/GenerationsInterface';
 import ScrollView = Animated.ScrollView;
 import AllPokemonList from './components/PokemonList';
+import { PokemonTypeColor } from './components/PokemonTypeColor';
 
 function App(): React.JSX.Element {
     const searchSheet = useRef<BottomSheetMethods>(null);
@@ -105,7 +106,7 @@ function App(): React.JSX.Element {
                     style={{backgroundColor: 'white'}}>
                     <ScrollView>
                         <View style={styles.genSheet}>
-                            <GenerationsSheet
+                            <GenerationsScreen
                                 onClick={(gen: number) => {
                                     selectedGenerationPressed(gen);
                                 }}
@@ -113,7 +114,7 @@ function App(): React.JSX.Element {
                         </View>
                     </ScrollView>
                 </BottomSheet>
-                <BottomSheet ref={pokemonSheet} height={'50%'}>
+                <BottomSheet ref={pokemonSheet} height={'90%'} style={{backgroundColor: PokemonTypeColor(getPokemonInfo?.types[0].type.name) ?? 'white'}}>
                     <PokedexStatScreen pokemonInfo={getPokemonInfo} />
                 </BottomSheet>
             </View>

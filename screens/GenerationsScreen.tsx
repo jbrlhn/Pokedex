@@ -6,7 +6,7 @@ type GenerationSheetProps = {
 	onClick: (gen: number) => void;
 };
 
-export default function GenerationsSheet({onClick}: GenerationSheetProps) {
+export default function GenerationsScreen({onClick}: GenerationSheetProps) {
 
 	let generations = [];
 

@@ -1,7 +1,8 @@
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
-import { colors, textColor } from '../assets/colors.js';
+import { textColor } from '../assets/colors.js';
 import { TypePill } from './TypePill';
 import { PokemonData } from '../pokemonrequests/PokemonData';
+import { PokemonTypeColor } from './PokemonTypeColor';
 
 export default function PokemonCard({pokemonInfo}: {pokemonInfo: PokemonData | null}
 	) {
@@ -10,9 +11,6 @@ export default function PokemonCard({pokemonInfo}: {pokemonInfo: PokemonData | n
 		while (order.length < size) order = "0" + order;
 		return order;
 	}
-	const pokemonType = (type: string | undefined) => {
-		return colors[type as keyof typeof colors];
-	};
 
 	const firstLetter = pokemonInfo?.name.charAt(0).toUpperCase() ?? '';
 	const remainderLetters = pokemonInfo?.name.slice(1) ?? '';
@@ -31,7 +29,7 @@ export default function PokemonCard({pokemonInfo}: {pokemonInfo: PokemonData | n
 
 	return (
 		<View>
-			<View style={{...styles.card, backgroundColor: pokemonType(pokemonInfo?.types[0]?.type.name)}}>
+			<View style={{...styles.card, backgroundColor: PokemonTypeColor(pokemonInfo?.types[0]?.type.name)}}>
 				<View>
 					<Text style={styles.pokemonID}>#{leadingNumber(pokemonInfo?.id ?? 0, 3)}</Text>
 					<Text style={{...styles.pokemonName}}>{displayName}</Text>
@@ -56,11 +54,9 @@ const styles = StyleSheet.create({
 	card: {
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		borderRadius: 20,
 		flexDirection: 'row',
 		backgroundColor: 'white',
 		padding: 16,
-		borderWidth: 1,
 		marginHorizontal: 8
 	},
 	stat: {
